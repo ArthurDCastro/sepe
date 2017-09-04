@@ -178,8 +178,6 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
         $equacao = $novaEquacao;
         //ok
 
-
-
         if (isset($termo[$termoIncognita])){
             foreach ($equacao as $key => $eq){
                 if ( '=' == $eq){
@@ -212,7 +210,32 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
             }
 
             if ($verificaDivisao){
-                //TODO Terminar quando tem divisão
+
+                foreach ($equacao as $key => $eq){
+                    foreach ($incognitas as $incog){
+                        if ($incog == $eq){
+                            $posicaoIncognita = $key;
+                        }
+                    }
+                }
+
+                if ($posicaoIncognita > $posicaoDivisao){
+                    $lado1semIncognita = '';
+                    for ($i = 2; $i < $posicaoDivisao; $i++){
+                        $lado1semIncognita = $lado1semIncognita . $equacao[$i];
+                    }
+                    eval('$ladosemIncognita =' . $lado1semIncognita . ';');
+                    eval('$resultado =' . $lado1semIncognita . '/' . $equacao[0] . ';');
+                } else {
+                    $lado1semIncognita = '';
+                    $count = count($equacao);
+                    for ($i = $posicaoDivisao + 1; $i < $count; $i++){
+                        $lado1semIncognita = $lado1semIncognita . $equacao[$i];
+                    }
+                    eval('$ladosemIncognita =' . $lado1semIncognita . ';');
+                    eval('$resultado =' . $equacao[0] . '*' . $lado1semIncognita . ';');
+                }
+
             } else {
                 foreach ($equacao as $key => $eq){
                     foreach ($incognitas as $incognita){
@@ -226,6 +249,7 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
                 }
 
                 $primeiroPow = true;
+                unset($posicaoPow);
                 foreach ($equacao as $key => $eq){
                     if ($eq == 'pow(' and $primeiroPow){
                         $posicaoPow['abre'] = $key;
@@ -253,7 +277,6 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
                         }
                         $equacao = $novaEquacao;
                         $verificaPow = true;
-                        //TODO Terminar P O W () potencia e rayz
                     }
                 }
 
@@ -262,6 +285,7 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
                 foreach ($equacao as $key => $eq){
                     if ($key > $posicaoIgual and $key != $posicaoIncognita){
                         $isoladoDaIncognita = $isoladoDaIncognita . $eq;
+
                     } elseif ($key == $posicaoIncognita){
                         $isoladoDaIncognita = $isoladoDaIncognita . 1;
                     }
@@ -275,13 +299,42 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
                     eval('$resultado =' . $equacao[0] . '/' . $isoladoDaIncognita . ';');
                 }
 
-
-
-
-
             }
 
         } else {
+            $primeiroPow = true;
+            $posicaoPow = [];
+            foreach ($equacao as $key => $eq){
+                if ($eq == 'pow(' and $primeiroPow){
+                    $posicaoPow['abre'] = $key;
+                    $primeiroPow = false;
+                } elseif ($eq == ',2)'){
+                    $posicaoPow['fecha'] = $key;
+                }
+            }
+
+            if (isset($posicaoPow)) {
+                if ($posicaoIncognita > $posicaoPow["abre"] and $posicaoIncognita < $posicaoPow['fecha']) {
+                    $novaEquacao = [];
+                    $constroiPow = '';
+                    $posicaoIncognita = -1;
+                    foreach ($equacao as $key => $eq){
+                        if ($key >= $posicaoPow["abre"] and $key <= $posicaoPow['fecha']){
+                            $constroiPow = $constroiPow . ' ' . $eq;
+                        } else {
+                            $novaEquacao[] = $eq;
+                            ++$posicaoIncognita;
+                        }
+                        if ($key == $posicaoPow['fecha'] ){
+                            $novaEquacao[] = $constroiPow;
+                        }
+                    }
+                    $equacao = $novaEquacao;
+                    $verificaPow = true;
+                }
+            }
+
+
             foreach ($equacao as $key => $eq){
                 foreach ($incognitas as $incognita){
                     if ($eq == $incognita){
@@ -292,13 +345,28 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
                 }
             }
 
+            foreach ($equacao as $key => $eq){
+                if ($verificaPow){
+                    if ($constroiPow == $eq){
+                        $posicaoIncognita = $key;
+                    }
+                }
+            }
+
             $lado1semIncognita = '';
             foreach ($equacao as $key => $eq){
                 if ($key != $posicaoIncognita and $posicaoIgual < $key){
                     $lado1semIncognita = $lado1semIncognita . $eq; //BEAT
                 }
             }
-            eval('$resultado =' . $lado[0] . '+ (' . $lado1semIncognita . ') * (-1);');
+
+            if ($verificaPow){
+                eval('$isoladoDaIncognita =' . $lado1semIncognita . ';');
+                eval('$resultado =' . 'pow(' . $equacao[0] . '-1*(' . $lado1semIncognita . ') ,1/2);');
+            } else {
+                eval('$isoladoDaIncognita =' . $lado1semIncognita . ';');
+                eval('$resultado =' . $equacao[0] . '-1*(' . $lado1semIncognita . ') ;');
+            }
         }
     }
 
@@ -306,16 +374,16 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
 }
 
 $dados = [
-    "v"  => 10,
-    "v0" => 5,
+    "s"  => 10,
+    "s0" => 5,
+    "v0"  => "v0",
+    "t"  => 3,
     "a"  => 2,
-    "dd" => "dd"
-
 ];
 
 
-$incog =   ["v", "v0", "a", "dd"];
+$incog =   ["s", "s0", "v0", "t", "a"];
 
-$form =  "v = pow( pow( v0 ,2) + ( 2 * a * dd ) ,1/2)";
+$form =  "s = s0 + ( v0 * t ) + ( 1 / 2 * a * pow( t ,2)";
 
 echo "\n ---------- \n ". resolveEquacao($dados, $incog, $form) . "\n ----------";
