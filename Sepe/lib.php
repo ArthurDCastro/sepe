@@ -2,8 +2,8 @@
 
 /**
  * @param array $dados
- * @param array $incog
- * @param string $form
+ * @param array $incognitas
+ * @param $formula
  * @return string
  */
 function resolveEquacao(array $dados, array $incognitas, $formula){
@@ -73,6 +73,10 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
         } elseif ($eq == ',1/2)'){
             $posicaoPow['fecha'] = $key;
         }
+    }
+    if  (!isset($posicaoPow['fecha']) or !isset($posicaoPow['abre'])){
+        $posicaoPow['fecha'] = 0;
+        $posicaoPow['abre'] = 0;
     }
 
     if ($posicaoIncognita < $posicaoIgual){
@@ -373,17 +377,63 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
     return $resultado;
 }
 
+/**
+ * @param $caminho
+ * @param array $dados
+ * @return array|string
+ */
+function buscaEquacoes($caminho, array $dados){
+
+    $formulas = json_decode(file_get_contents($caminho, true));
+
+    $formulasPossiveis = [];
+    foreach ($formulas as $key => $formula){
+        $formulasPossiveis[] = [
+            "incog"  => $key,
+            "pontos" => 0
+        ];
+        $pontos = 0;
+        foreach ($formula as $keyForm => $form) {
+            if ($keyForm == "incog"){
+                foreach ($form as $incog){
+                    if (isset($dados[$incog])) {
+                        $pontos++;
+                    }
+                }
+                if ($pontos >= count($form)){
+                    $formulasPossiveis[$key]["pontos"] = $pontos;
+                }
+            }
+        }
+    }
+
+    $formulaPossivel = [];
+    foreach ($formulasPossiveis as $formula){
+        if ($formula["pontos"] > 0){
+            $formulaPossivel[] = $formula;
+        }
+    }
+
+    $formulaFinal = "";
+    if (count($formulaPossivel) > 1){
+
+    } else {
+        $formulaFinal = (array) $formulas[$formulaPossivel[0]["incog"]];
+    }
+
+    return $formulaFinal;
+
+}
+
 $dados = [
-    "s"  => 10,
-    "s0" => 5,
-    "v0"  => "v0",
-    "t"  => 3,
-    "a"  => 2,
+    "v"  => 10,
+    "dd" => 5,
+    "dt"  => "dt"
 ];
 
 
-$incog =   ["s", "s0", "v0", "t", "a"];
+$formulas =  buscaEquacoes("formulas.json", $dados);
 
-$form =  "s = s0 + ( v0 * t ) + ( 1 / 2 * a * pow( t ,2)";
 
-echo "\n ---------- \n ". resolveEquacao($dados, $incog, $form) . "\n ----------";
+echo "\n ---------- \n ". resolveEquacao($dados, $formulas["incog"], $formulas["formula"]) . "\n ----------";
+
