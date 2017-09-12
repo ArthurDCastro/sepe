@@ -1,10 +1,36 @@
 <?php
 
 /**
+ * @param array $equacao
+ * @return string
+ */
+function passoApasso(array $equacao){
+    $operacoes           = ["+", "-", "/", "*", ",1/2)", ",2)", "pow("];
+    $operacoesMascaradas = ["+", "-", "/", "*", ",1/2)", ",2)", "pow("];
+
+    $passoApasso = '';
+    foreach ($equacao as $eq){
+        $verificaOp = true;
+        foreach ($operacoes as $key => $op){
+            if ($eq == $op){
+                $passoApasso = $passoApasso .' '. $operacoesMascaradas[$key];
+                $verificaOp = false;
+                break;
+            }
+        }
+        if ($verificaOp){
+            $passoApasso = $passoApasso .' '. $eq;
+        }
+
+    }
+    return $passoApasso;
+}
+
+/**
  * @param array $dados
  * @param array $incognitas
  * @param $formula
- * @return string
+ * @return array
  */
 function resolveEquacao(array $dados, array $incognitas, $formula){
 
@@ -16,7 +42,15 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
     $equacaoAberta = explode(" ", $formula);
 
     $equacao = [];
+    $passoApasso = [];
+    $passoApasso[] = $formula;
     $verificaPow = false;
+
+    foreach ($dados as $keyDado => $dado){
+        if($keyDado == $dado){
+            $incognitaBuscada = $dado;
+        }
+    }
 
     foreach ($equacaoAberta as $termo){
         $verificaOperacao = true;
@@ -33,11 +67,15 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
             }
         }
         if ($verificaOperacao and $verificaNumero){
-            $equacao[] = $dados[$termo];
+            if (isset($dados[$termo])){
+                $equacao[] = $dados[$termo];
+            }
         } else {
             $equacao[] = $termo;
         }
     } //Substitui incognitas
+
+    $passoApasso[] = passoApasso($equacao);
 
     $igual = false;
     $lado[0] = '';
@@ -81,7 +119,9 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
 
     if ($posicaoIncognita < $posicaoIgual){
 
+
         eval('$resultado =' . $lado[1] . ';');  //Se a incognita ja estiver isolada
+        $passoApasso[] = $incognitaBuscada . ' = ' . $resultado;
 
     } /*Verica a posicao da incognita, se ela estiver isolada resolva a equação*/ else {
 
@@ -99,6 +139,7 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
                     }
                 }
                 $equacao = $novaEquacao;
+                $passoApasso[] = passoApasso($equacao);
                 foreach ($equacao as $key => $eq){
                     foreach ($incognitas as $incognita){
                         if ($eq == $incognita){
@@ -123,7 +164,7 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
             }
         } //Realoca as posiçoes da equação
         $equacao = $equacaoNova;
-
+        $passoApasso[] = passoApasso($equacao);
 
         $i = 0;
         $verificaParenteses = false;
@@ -180,6 +221,7 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
             $novaEquacao[] = $termoResolvido;
         } //Faz parte ^
         $equacao = $novaEquacao;
+        $passoApasso[] = passoApasso($equacao);
         //ok
 
         if (isset($termo[$termoIncognita])){
@@ -204,6 +246,7 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
                 $equacaoNova[] = $eq;
             }
             $equacao = $equacaoNova;
+            $passoApasso[] = passoApasso($equacao);
 
             $verificaDivisao = false;
             foreach ($equacao as $key => $eq){
@@ -229,7 +272,9 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
                         $lado1semIncognita = $lado1semIncognita . $equacao[$i];
                     }
                     eval('$ladosemIncognita =' . $lado1semIncognita . ';');
+                    $passoApasso[] = $incognitaBuscada . ' = ' . $lado1semIncognita . ' / ' . $equacao[0];
                     eval('$resultado =' . $lado1semIncognita . '/' . $equacao[0] . ';');
+                    $passoApasso[] = $incognitaBuscada . ' = ' . $resultado;
                 } else {
                     $lado1semIncognita = '';
                     $count = count($equacao);
@@ -237,7 +282,9 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
                         $lado1semIncognita = $lado1semIncognita . $equacao[$i];
                     }
                     eval('$ladosemIncognita =' . $lado1semIncognita . ';');
+                    $passoApasso[] = $incognitaBuscada . ' = ' . $lado1semIncognita . ' * ' . $equacao[0];
                     eval('$resultado =' . $equacao[0] . '*' . $lado1semIncognita . ';');
+                    $passoApasso[] = $incognitaBuscada . ' = ' . $resultado;
                 }
 
             } else {
@@ -280,6 +327,7 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
                             }
                         }
                         $equacao = $novaEquacao;
+                        $passoApasso[] = passoApasso($equacao);
                         $verificaPow = true;
                     }
                 }
@@ -297,10 +345,14 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
 
                 if ($verificaPow){
                     eval('$isoladoDaIncognita =' . $isoladoDaIncognita . ';');
+                    $passoApasso[] = $incognitaBuscada . ' = ' . 'pow( ' . $equacao[0] . ' / ' . $isoladoDaIncognita . ' ,1/2)';
                     eval('$resultado =' . 'pow(' . $equacao[0] . '/' . $isoladoDaIncognita . ',1/2);');
+                    $passoApasso[] = $incognitaBuscada . ' = ' . $resultado;
                 } else {
                     eval('$isoladoDaIncognita =' . $isoladoDaIncognita . ';');
+                    $passoApasso[] = $incognitaBuscada . ' = ' . $equacao[0] . '/' . $isoladoDaIncognita;
                     eval('$resultado =' . $equacao[0] . '/' . $isoladoDaIncognita . ';');
+                    $passoApasso[] = $incognitaBuscada . ' = ' . $resultado;
                 }
 
             }
@@ -334,6 +386,7 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
                         }
                     }
                     $equacao = $novaEquacao;
+                    $passoApasso[] = passoApasso($equacao);
                     $verificaPow = true;
                 }
             }
@@ -366,74 +419,167 @@ function resolveEquacao(array $dados, array $incognitas, $formula){
 
             if ($verificaPow){
                 eval('$isoladoDaIncognita =' . $lado1semIncognita . ';');
+                $passoApasso[] = $incognitaBuscada . ' = ' . 'pow( ' . $equacao[0] . ' -1 * ( ' . $lado1semIncognita . ' ) ,1/2)';
                 eval('$resultado =' . 'pow(' . $equacao[0] . '-1*(' . $lado1semIncognita . ') ,1/2);');
+                $passoApasso[] = $incognitaBuscada . ' = ' . $resultado;
             } else {
                 eval('$isoladoDaIncognita =' . $lado1semIncognita . ';');
+                $passoApasso[] = $incognitaBuscada . ' = ' . $equacao[0] . '-1 * ( ' . $lado1semIncognita . ' )';
                 eval('$resultado =' . $equacao[0] . '-1*(' . $lado1semIncognita . ') ;');
+                $passoApasso[] = $incognita . ' = ' . $resultado;
             }
         }
     }
 
-    return $resultado;
+    $final = [
+        'resultado' => $resultado,
+        'passoApasso' => $passoApasso
+    ];
+
+    return $final;
+}
+
+/**
+ * @param array $formulasComIncognitas
+ * @param array $dados
+ * @param $apenasCompletas
+ * @return array
+ */
+function pontua(array $formulasComIncognitas, array $dados, $apenasCompletas){
+    $formulasPossiveis = [];
+    $verificaFormula = false;
+    foreach ($formulasComIncognitas as $key => $formulaCI){
+        $pontos = 0;
+        $formulaCI = (array) $formulaCI;
+        foreach ($formulaCI["incog"] as $incog){
+            foreach ($dados as $keyDado => $value){
+                if ($keyDado == $incog){
+                    $pontos++;
+                }
+            }
+            if ($pontos >= count($formulaCI["incog"])){
+                $formulasPossiveis[] = $formulaCI;
+                $verificaFormula = true;
+            } elseif ($pontos >= count($formulaCI["incog"]) -1 and !$apenasCompletas){
+                $formulasPossiveis[] = $formulaCI;
+            }
+        }
+
+    } //Puxa formulas apartir de pontuação
+
+    return [
+        "formulasPossiveis" => $formulasPossiveis,
+        "verificaFormula" => $verificaFormula
+    ];
 }
 
 /**
  * @param $caminho
  * @param array $dados
- * @return array|string
+ * @return array
  */
-function buscaEquacoes($caminho, array $dados){
-
+function buscaEquacao($caminho, array $dados){
     $formulas = json_decode(file_get_contents($caminho, true));
 
-    $formulasPossiveis = [];
+    $incognitas= [];
+    foreach ($dados as $key => $dado){
+        if ($key == $dado and gettype($dado) == "string"){
+            $incognitas[] = $key;
+        }
+    } //Encontra Incognitas
+
+    $formulasComIncognitas = [];
     foreach ($formulas as $key => $formula){
-        $formulasPossiveis[] = [
-            "incog"  => $key,
-            "pontos" => 0
-        ];
-        $pontos = 0;
-        foreach ($formula as $keyForm => $form) {
-            if ($keyForm == "incog"){
-                foreach ($form as $incog){
-                    if (isset($dados[$incog])) {
-                        $pontos++;
-                    }
-                }
-                if ($pontos >= count($form)){
-                    $formulasPossiveis[$key]["pontos"] = $pontos;
+        $formula = (array) $formula;
+        foreach ($formula["incog"] as $incog){
+            foreach ($incognitas as $incognita){
+                if ($incognita == $incog){
+                    $formulasComIncognitas[] = $formula;
+                    break;
                 }
             }
         }
-    }
 
-    $formulaPossivel = [];
-    foreach ($formulasPossiveis as $formula){
-        if ($formula["pontos"] > 0){
-            $formulaPossivel[] = $formula;
+    } //Puxa apenas os arrays com incognitas
+
+    $pontua = pontua($formulasComIncognitas, $dados, false);
+
+    $formulasPossiveis = $pontua["formulasPossiveis"];
+    $verificaFormula   = $pontua["verificaFormula"];
+
+    $resultadoFinal = [];
+    if ($verificaFormula and count($incognitas) == 1){
+        $count = count($formulasPossiveis);
+
+        $resultadoFinal[] = [
+            "formula" => $formulasPossiveis[rand(0, $count -1)],
+            "dados"   => $dados
+        ];
+    } else {
+        foreach ($formulasPossiveis as $formulaPossivel){
+            foreach ($formulaPossivel["incog"] as $incog){
+                $verificaIncog = true;
+                foreach ($dados as $keyDado => $value){
+                    if ($keyDado == $incog){
+                        $verificaIncog = false;
+                    }
+                }
+                if ($verificaIncog){
+                    $dados[$incog] = $incog;
+                }
+            }
+        }
+
+        $pontua = pontua($formulas, $dados, true);
+
+        $formulasPossiveis = $pontua["formulasPossiveis"];
+
+        foreach ($formulasPossiveis as $key => $formulaPossivel){
+            $novoDado = [];
+            foreach ($formulaPossivel["incog"] as $incog){
+                foreach ($dados as $keyDado => $dado){
+                    if ($keyDado == $incog){
+                        $novoDado[$keyDado] = $dado;
+                    }
+                }
+            }
+            $resultadoFinal[] = [
+                "formula" => $formulaPossivel,
+                "dados"   => $novoDado
+            ];
         }
     }
 
-    $formulaFinal = "";
-    if (count($formulaPossivel) > 1){
 
-    } else {
-        $formulaFinal = (array) $formulas[$formulaPossivel[0]["incog"]];
-    }
 
-    return $formulaFinal;
-
+    return $resultadoFinal;
 }
 
 $dados = [
     "v"  => 10,
-    "dd" => 5,
-    "dt"  => "dt"
+    "v0" => 0,
+    "a"  => 2,
+    "t" => "t"
 ];
 
 
-$formulas =  buscaEquacoes("formulas.json", $dados);
+$formulas =  buscaEquacao("formulas.json", $dados);
 
-
-echo "\n ---------- \n ". resolveEquacao($dados, $formulas["incog"], $formulas["formula"]) . "\n ----------";
+$count = count($formulas);
+for ($i = 0; $i < $count; $i++){
+    $resultado = resolveEquacao($formulas[$i]["dados"], $formulas[$i]["formula"]["incog"], $formulas[$i]["formula"]["formula"]);
+    foreach ($resultado['passoApasso'] as $passoApasso){
+        echo $passoApasso. "\n";
+    }
+    if (isset($formulas[$i+1])){
+        foreach ($formulas[$i]["dados"] as $dados1){
+            foreach ($formulas[$i+1]["dados"] as $dados2){
+                if ($dados1 == $dados2){
+                    $formulas[$i+1]["dados"][$dados2] = $resultado['resultado'];
+                }
+            }
+        }
+    }
+    echo "\n";
+}
 

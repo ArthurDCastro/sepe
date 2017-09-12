@@ -11,7 +11,6 @@
     "nomeFormula": "Funcao horaria do deslocamento",
     "formula": "s = s0 + ( v * dt )",
     "incog": ["s", "s0", "v", "dt"]
-
   },
 
   {
@@ -31,12 +30,19 @@
   },
 
 
-
   {
     "categoria" : "movimento uniformemente variado",
     "nomeFormula": "Funcao horaria da posicao em fucao do tempo",
     "formula": "s = s0 + ( v0 * t ) + ( 1/2 * a * pow( t ,2) )",
     "incog": ["s", "s0", "v0", "t", "a"]
+
+  },
+
+  {
+    "categoria" : "movimento uniformemente variado",
+    "nomeFormula": "Funcao horaria da posicao em fucao do tempo",
+    "formula": "s = s0 + t + ( 1/2 * a * pow( t ,2) )",
+    "incog": ["s", "s0", "t", "a"]
 
   },
 
