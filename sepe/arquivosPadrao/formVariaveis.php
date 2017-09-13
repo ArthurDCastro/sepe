@@ -1,6 +1,6 @@
 <?php
 
-    $variaveis = buscaVariaveis("json/formulas.json");
+    $variaveis = buscaVariaveis("json/", "fisica.json");
 ?>
 
 <form class="form-horizontal" action="fisica.php?acao=dados" method="post">
@@ -11,12 +11,12 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="checkboxes">Escolha as variaveis:</label>
             <div class="col-md-8">
-                <?php foreach($variaveis as $variavel):?>
+                <?php foreach($variaveis as $key => $variavel):?>
                     <div class="col-md-4">
                         <div class="checkbox">
-                            <label for="<?php echo $variavel ?>">
-                                <input type="checkbox" name="variaveis[]" id="<? echo $variavel ?>" value="<?php echo $variavel ?>">
-                                <?php echo $variavel ?>
+                            <label for="<?php echo $key ?>">
+                                <input type="checkbox" name="variaveis[]" id="<? echo $key ?>" value="<?php echo $key?>">
+                                <?php echo $variavel["mascara"] ?>
                             </label>
                         </div>
                     </div>
@@ -26,9 +26,9 @@
 
         <!-- Button -->
         <div class="form-group">
-            <label class="col-md-4 control-label" for="singlebutton">Enviar Variaveis</label>
-            <div class="col-md-4">
-                <button id="singlebutton" name="singlebutton" class="btn btn-primary">Enviar</button>
+            <label class="col-md-4 control-label" for="singlebutton">Enviar Dados</label>
+            <div class="col-md-8">
+                <button id="singlebutton" class="btn btn-primary">Enviar</button>
             </div>
         </div>
 

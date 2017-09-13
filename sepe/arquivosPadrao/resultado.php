@@ -11,7 +11,7 @@
         }
     }
 
-    $formulas =  buscaEquacao("json/formulas.json", $dados);
+    $formulas =  buscaEquacao("json/fisica.json", $dados);
 
     $count = count($formulas);
     for ($i = 0; $i < $count; $i++){
@@ -31,3 +31,10 @@
         echo "<br>";
     }
 ?>
+<!-- Button -->
+<div class="form-group">
+    <label class="col-md-4 control-label" for="singlebutton">Enviar Dados</label>
+    <div class="col-md-8">
+        <a id="singlebutton" class="btn btn-primary" href="fisica.php?acao=variaveis">Voltar</a>
+    </div>
+</div>

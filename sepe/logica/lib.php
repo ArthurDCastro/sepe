@@ -558,8 +558,9 @@ function buscaEquacao($caminho, array $dados){
  * @param $caminho
  * @return array
  */
-function buscaVariaveis($caminho){
-    $formulas = json_decode(file_get_contents($caminho, true));
+function buscaVariaveis($caminho, $materia){
+    $formulas      = json_decode(file_get_contents($caminho . $materia, true));
+    $variaveisJson = (array) json_decode(file_get_contents($caminho . "variaveis.json", true));
 
     $variaveis = [];
     foreach ($formulas as $formula){
@@ -579,5 +580,57 @@ function buscaVariaveis($caminho){
         }
     }
 
-    return $variaveis;
+    $variaveisNovas = [];
+    foreach ($variaveisJson as $keyJson => $variavelJson){
+        foreach ($variaveis as $key => $variavel){
+            if ($variavel == $keyJson){
+                $variaveisNovas[$variavel] = (array) $variavelJson;
+            }
+        }
+    }
+
+
+    return $variaveisNovas;
+}
+
+/**
+ * @param $variaveis
+ * @param $escolhidas
+ * @return array
+ */
+function arrumaVariaveis($variaveis, $escolhidas){
+    $mascaradas = [];
+
+    foreach ($variaveis as $key => $variavel){
+        foreach ($escolhidas as $escolhida){
+            if ($key == $escolhida){
+                $mascaradas[] = $variavel;
+            }
+        }
+    }
+
+    return $mascaradas;
+}
+
+/**
+ * @param $acao
+ * @param $caminho
+ */
+function rotas($acao, $caminho){
+    switch ($acao) {
+        case "variaveis":
+            include "arquivosPadrao/formVariaveis.php";
+            break;
+
+        case "dados":
+            include "arquivosPadrao/formDados.php";
+            break;
+
+        case "resultado":
+            include "arquivosPadrao/resultado.php";
+            break;
+
+        default:
+            break;
+    }
 }

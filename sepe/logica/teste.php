@@ -9,7 +9,9 @@ $dados = [
     "s"  => "s"
 ];
 
-$formulas =  buscaEquacao("formulas.json", $dados);
+print_r(buscaVariaveis("../json/","fisica.json"));
+
+/*$formulas =  buscaEquacao("fisica.json", $dados);
 
 $count = count($formulas);
 for ($i = 0; $i < $count; $i++){
@@ -27,4 +29,4 @@ for ($i = 0; $i < $count; $i++){
         }
     }
     echo "\n";
-}
+}*/

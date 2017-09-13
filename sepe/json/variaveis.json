@@ -1,0 +1,20 @@
+
+  {
+    "v": {
+      "nome": "Velocidade",
+      "mascara": "V"
+    },
+    "v0": {
+      "nome": "Velocidade Inicial",
+      "mascara": "V0"
+    },
+    "ds": {
+      "nome": "Variacao da Distancia",
+      "mascara": "ΔS"
+    },
+    "dt": {
+      "nome": "Variacao da Distancia",
+      "mascara": "Δt"
+    }
+  }
+

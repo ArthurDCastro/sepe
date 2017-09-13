@@ -31,22 +31,7 @@
         <div class="col-md-12">
             <div class="col-md-12" style="color: white">
                 <?php
-                switch ($_GET["acao"]) {
-                    case "variaveis":
-                        include "arquivosPadrao/formVariaveis.php";
-                        break;
-
-                    case "dados":
-                        include "arquivosPadrao/formDados.php";
-                        break;
-
-                    case "resultado":
-                        include "arquivosPadrao/resultado.php";
-                        break;
-
-                    default:
-                        break;
-                }
+                    rotas($_GET["acao"], "json/fisica.json");
                 ?>
             </div>
         </div>
