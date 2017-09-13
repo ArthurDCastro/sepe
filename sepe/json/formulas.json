@@ -1,0 +1,72 @@
+[
+  {
+    "categoria" : "velocidade",
+    "nomeFormula": "Velocidade Media",
+    "formula": "v = ( dd / dt )",
+    "incog": ["v", "dd", "dt"]
+  },
+
+  {
+    "categoria" :"movimento uniforme",
+    "nomeFormula": "Funcao horaria do deslocamento",
+    "formula": "s = s0 + ( v * dt )",
+    "incog": ["s", "s0", "v", "dt"]
+  },
+
+  {
+    "categoria" : "movimento uniformemente variado",
+    "nomeFormula": "Aceleracao media",
+    "formula": "a = ( dv / dt )",
+    "incog": ["a", "dv", "dt"]
+
+  },
+
+  {
+    "categoria" : "movimento uniformemente variado",
+    "nomeFormula": "Funcao horaria da velocidade",
+    "formula": "v = v0 + ( a * t )",
+    "incog": ["v", "v0", "a", "t"]
+
+  },
+
+
+  {
+    "categoria" : "movimento uniformemente variado",
+    "nomeFormula": "Funcao horaria da posicao em fucao do tempo",
+    "formula": "s = s0 + ( v0 * t ) + ( 1/2 * a * pow( t ,2) )",
+    "incog": ["s", "s0", "v0", "t", "a"]
+
+  },
+
+  {
+    "categoria" : "movimento uniformemente variado",
+    "nomeFormula": "Funcao horaria da posicao em fucao do tempo",
+    "formula": "s = s0 + t + ( 1/2 * a * pow( t ,2) )",
+    "incog": ["s", "s0", "t", "a"]
+
+  },
+
+  {
+    "categoria" : "movimento uniformemente variado",
+    "nomeFormula": "Equacao de Torricelli",
+    "formula": "v = pow( pow( v0 ,2) + ( 2 * a * dd ) ,1/2)",
+    "incog": ["v", "v0", "a", "dd"]
+
+  },
+
+  {
+    "categoria" : "movimento vertical",
+    "nomeFormula": "Funcao horaria da velocidade no movimento vertical",
+    "formula": " v = v0 + ( g * t )",
+    "incog": ["v", "v0", "g", "t"]
+
+  },
+
+  {
+    "categoria" : "movimento vertical",
+    "nomeFormula": "Funcao horaria da posicao em funcao do tempo no movimento vertical",
+    "formula": " h = h0 + ( v0 * t ) + ( 1/2 * g * pow( t ,2) )",
+    "incog": ["h", "h0", "v0", "t", "g"]
+
+  }
+]
