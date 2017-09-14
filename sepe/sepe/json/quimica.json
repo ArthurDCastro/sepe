@@ -1,0 +1,81 @@
+[
+  {
+    "categoria" :"concentracoes",
+    "nomeFormula": "concentracao comum",
+    "formula": "C = ( m1 / V )",
+    "incog": ["C", "m1", "V"]
+  },
+
+  {
+    "categoria" : "concentracoes",
+    "nomeFormula": "Molaridade",
+    "formula": "M = ( n / V )",
+    "incog": ["M", "n", "V"]
+
+  },
+
+  {
+    "categoria" : "concentracoes",
+    "nomeFormula": "densidade",
+    "formula": "d = ( m * V )",
+    "incog": ["d", "m", "V"]
+
+  },
+
+
+  {
+    "categoria" : "concentracoes",
+    "nomeFormula": "Concetracao Molar",
+    "formula": "M = ( m1 / mm )",
+    "incog": ["M", "m1", "mm"]
+
+  },
+
+  {
+    "categoria" : "concentracoes",
+    "nomeFormula": "titulo",
+    "formula": "T = ( m1 / m )",
+    "incog": ["T", "m1", "m"]
+
+  },
+
+  {
+    "categoria" : "concentracoes",
+    "nomeFormula": "titulo percentual",
+    "formula": "T = ( ( m1 / m ) * 100 )",
+    "incog": ["T", "ml", "m"]
+
+  },
+
+  {
+    "categoria" : "mistura",
+    "nomeFormula": "diluicao",
+    "formula": "C1 = ( ( C2 * V2 ) / V1 )",
+    "incog": ["C1", "C2", "V2", "V1"]
+
+  },
+
+  {
+    "categoria" : "mistura",
+    "nomeFormula": "mistura por concentracao comum",
+    "formula": "C3 = ( ( C1 * V1 ) + ( C2 * V2 ) ) / ( V1 + V2 )",
+    "incog": ["C3", "C2", "C1", "V1", "V2"]
+
+  },
+
+  {
+    "categoria" : "mistura",
+    "nomeFormula": "mistura por molaridade",
+    "formula": "M3 = ( ( M1 * V1 ) + ( M2 * V2 ) ) / ( V1 + V2 )",
+    "incog": ["M3", "M2", "M1", "V1", "V2"]
+
+  },
+
+  {
+    "categoria" : "atomo",
+    "nomeFormula": "massa atomica",
+    "formula": "A = N + P",
+    "incog": ["A", "N", "P"]
+
+  }
+]

@@ -1,0 +1,91 @@
+{
+  "v": {
+    "nome": "Velocidade",
+    "mascara": "v"
+  },
+
+  "v0": {
+    "nome": "Velocidade Inicial",
+    "mascara": "v0"
+  },
+
+  "ds": {
+    "nome": "Variacao da Distancia",
+    "mascara": "Δs"
+  },
+
+  "dt": {
+    "nome": "Variacao do Tempo",
+    "mascara": "Δt"
+  },
+
+  "dv": {
+    "nome": "Variacao da Velocidade",
+    "mascara": "Δv"
+  },
+
+  "dh": {
+    "nome": "Variacao da Altura",
+    "mascara": "Δh"
+  },
+
+  "s": {
+    "nome": "Posicao",
+    "mascara": "s"
+  },
+
+  "s0": {
+    "nome": "Posicao Inicial",
+    "mascara": "s0"
+  },
+
+  "a": {
+    "nome": "Aceleracao",
+    "mascara": "a"
+  },
+
+  "h": {
+    "nome": "Altura",
+    "mascara": "h"
+  },
+
+  "h0": {
+    "nome": "Altura Inicial",
+    "mascara": "h0"
+  },
+
+  "ag": {
+    "nome": "Angulo Descrito",
+    "mascara": "φ"
+  },
+
+  "ag0": {
+    "nome": "Angulo Descrito Inicial",
+    "mascara": "φ0"
+  },
+
+  "S": {
+    "nome": "Arco do Circulo",
+    "mascara": "S"
+  },
+
+  "r": {
+    "nome": "Raio do Circulo",
+    "mascara": "r"
+  },
+
+  "dag": {
+    "nome": "Deslocamento Angular",
+    "mascara": "Δφ"
+  },
+
+  "dS": {
+    "nome": "Variacao da Posicao do Arco",
+    "mascara": "ΔS"
+  },
+
+  "va": {
+    "nome": "Velocidade Angular",
+    "mascara": "ω"
+  }
+}
